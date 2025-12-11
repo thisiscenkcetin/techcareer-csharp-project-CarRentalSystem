@@ -1,0 +1,102 @@
+{
+  "Cars": [
+    {
+      "Plaka": "34ABC123",
+      "MarkaModel": "Toyota Corolla 2024",
+      "GunlukFiyat": 2500,
+      "GorselUrl": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800\u0026h=600\u0026fit=crop",
+      "Kategori": "Sedan",
+      "AktifMi": true
+    },
+    {
+      "Plaka": "34DEF456",
+      "MarkaModel": "Renault Clio 5",
+      "GunlukFiyat": 2650,
+      "GorselUrl": "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=800\u0026h=600\u0026fit=crop",
+      "Kategori": "Hatchback",
+      "AktifMi": true
+    },
+    {
+      "Plaka": "34GHI789",
+      "MarkaModel": "BMW 3 Series",
+      "GunlukFiyat": 3800,
+      "GorselUrl": "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800\u0026h=600\u0026fit=crop",
+      "Kategori": "Sedan",
+      "AktifMi": true
+    },
+    {
+      "Plaka": "34JKL012",
+      "MarkaModel": "Ford EcoSport",
+      "GunlukFiyat": 2700,
+      "GorselUrl": "https://images.unsplash.com/photo-1611859266238-4b98091d9d9b?w=800\u0026h=600\u0026fit=crop",
+      "Kategori": "SUV",
+      "AktifMi": true
+    },
+    {
+      "Plaka": "34VWX234",
+      "MarkaModel": "Hyundai i20",
+      "GunlukFiyat": 2550,
+      "GorselUrl": "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800\u0026h=600\u0026fit=crop",
+      "Kategori": "Hatchback",
+      "AktifMi": true
+    }
+  ],
+  "Reservations": [
+    {
+      "MusteriAdi": "Ahmet Y\u0131lmaz",
+      "Plaka": "34ABC123",
+      "BaslangicTarihi": "2025-12-05T00:00:00",
+      "BitisTarihi": "2025-12-08T00:00:00",
+      "ToplamUcret": 750,
+      "OlusturulmaTarihi": "2025-12-10T23:00:00"
+    },
+    {
+      "MusteriAdi": "Fatma \u00D6zdemir",
+      "Plaka": "34DEF456",
+      "BaslangicTarihi": "2025-12-08T00:00:00",
+      "BitisTarihi": "2025-12-11T00:00:00",
+      "ToplamUcret": 1050,
+      "OlusturulmaTarihi": "2025-12-10T23:00:00"
+    },
+    {
+      "MusteriAdi": "Mehmet Kaya",
+      "Plaka": "34GHI789",
+      "BaslangicTarihi": "2025-12-01T00:00:00",
+      "BitisTarihi": "2025-12-04T00:00:00",
+      "ToplamUcret": 540,
+      "OlusturulmaTarihi": "2025-12-09T10:00:00"
+    },
+    {
+      "MusteriAdi": "Ay\u015Fe Demir",
+      "Plaka": "34JKL012",
+      "BaslangicTarihi": "2025-11-28T00:00:00",
+      "BitisTarihi": "2025-11-30T00:00:00",
+      "ToplamUcret": 1350,
+      "OlusturulmaTarihi": "2025-11-27T15:00:00"
+    },
+    {
+      "MusteriAdi": "Cenk \u00C7etin",
+      "Plaka": "34EFG123",
+      "BaslangicTarihi": "2025-12-10T00:00:00",
+      "BitisTarihi": "2025-12-11T00:00:00",
+      "ToplamUcret": 280,
+      "OlusturulmaTarihi": "2025-12-11T00:41:18.0479075+03:00"
+    },
+    {
+      "MusteriAdi": "Cenk \u00C7etin",
+      "Plaka": "34EFG123",
+      "BaslangicTarihi": "2025-12-11T00:00:00",
+      "BitisTarihi": "2025-12-12T00:00:00",
+      "ToplamUcret": 280,
+      "OlusturulmaTarihi": "2025-12-11T14:47:40.6764694+03:00"
+    },
+    {
+      "MusteriAdi": "Cenk \u00C7etin",
+      "Plaka": "34DEF456",
+      "BaslangicTarihi": "2025-12-11T00:00:00",
+      "BitisTarihi": "2025-12-12T00:00:00",
+      "ToplamUcret": 350,
+      "OlusturulmaTarihi": "2025-12-11T14:56:59.0584064+03:00"
+    }
+  ]
+}

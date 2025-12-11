@@ -1,0 +1,1421 @@
+﻿@model List<CarRentalWeb.Models.Car>
+
+@{
+    ViewData["Title"] = "Akıllı Araç Kiralama Rezervasyon Sistemi";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
+<style>
+    :root {
+        --primary-color: #1a1a1a;
+        --secondary-color: #dc3545;
+        --accent-color: #f8f9fa;
+        --text-dark: #2c3e50;
+        --text-light: #ecf0f1;
+    }
+
+    * {
+        transition: all 0.3s ease;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--accent-color);
+    }
+
+    /* HERO SLIDER SECTION */
+    .hero-slider-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background-image: radial-gradient(#320643, #140534);
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* HEADER */
+    .header {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1111;
+        padding: 12px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .header-nav {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex: 1;
+    }
+
+    .nav-left {
+        justify-content: flex-start;
+    }
+
+    .nav-right {
+        justify-content: flex-end;
+    }
+
+    .header .logo-wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 0 0 auto;
+    }
+
+    .header .logo {
+        width: 58px;
+        height: 58px;
+        display: inline-block;
+    }
+
+    .header ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        display: flex;
+        gap: 16px;
+    }
+
+    .header li {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        color: white;
+        cursor: pointer;
+        transition: color 0.3s ease, opacity 0.3s ease;
+    }
+
+    .header li:hover {
+        color: var(--secondary-color);
+    }
+
+    #slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    #slide .item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    #slide .item .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 75%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        opacity: 0;
+        transform: scale(3);
+        transition: 1.5s;
+    }
+
+    #slide .item .image img {
+        width: 82%;
+        max-width: 1100px;
+        max-height: 620px;
+        object-fit: contain;
+        transition: 0.5s;
+    }
+
+    /* Make the first slide image (img2.png) smaller so it doesn't dominate the viewport */
+    #slide .item:nth-child(1) .image img {
+        width: 30%;
+        max-width: 360px;
+        max-height: 300px;
+        transform: translateY(-8%);
+    }
+
+    #slide .item .image::before {
+        position: absolute;
+        bottom: -30px;
+        height: 60px;
+        width: 60%;
+        background-color: #000;
+        content: '';
+        z-index: -1;
+        border-radius: 50%;
+        filter: blur(30px);
+    }
+
+    #slide .item .image img:hover {
+        transform: scale(1.1);
+    }
+
+    /* Enlarge the second slide image (img1.png) and move it slightly upward */
+    #slide .item:nth-child(2) .image img {
+        /* increase visible size without affecting other slides */
+        width: 92%;
+        max-width: 1200px;
+        max-height: 700px;
+        transform: translateY(-6%);
+    }
+
+    /* Preserve the upward offset on hover and add scale */
+    #slide .item:nth-child(2) .image img:hover {
+        transform: translateY(-6%) scale(1.12);
+    }
+
+    .slider-content .left {
+        position: absolute;
+        left: 60px;
+        top: 22%;
+        display: none;
+        color: white;
+        z-index: 10;
+        max-width: 420px;
+    }
+
+    .slider-content .left h1 {
+        font-size: 3.5rem;
+        font-weight: 500;
+        margin-bottom: 10px;
+        text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .slider-content .left .des {
+        font-size: 0.95rem;
+        font-weight: 100;
+        opacity: 0.7;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .slider-content .left button {
+        font-size: 0.9rem;
+        background: linear-gradient(135deg, var(--secondary-color) 0%, #c82333 100%);
+        border: none;
+        color: #fff;
+        padding: 10px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .slider-content .left button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+    }
+
+    .slider-content .left button i:nth-child(1) {
+        margin-left: 10px;
+    }
+
+    .slider-content .right {
+        position: absolute;
+        right: 60px;
+        top: 30%;
+        display: none;
+        color: white;
+        z-index: 10;
+        max-width: 320px;
+        text-align: left;
+    }
+
+    .slider-content .right h2 {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: var(--secondary-color);
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Align the AVANTAJLAR block with the left heading on the second slide */
+    #slide .item:nth-child(2) .slider-content .right {
+        /* match the left heading vertical position (left top is 22%) */
+        top: 22%;
+    }
+
+    #slide .item:nth-child(2) .right h2 {
+        transform: translateY(0);
+        margin-bottom: 12px;
+    }
+
+    .slider-content .right ul {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .slider-content .right li {
+        font-size: 0.85rem;
+        position: relative;
+        margin-top: 20px;
+        padding-left: 40px;
+    }
+
+    .slider-content .right li::before {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translate(0, -50%);
+        width: 8px;
+        height: 8px;
+        background-color: #8C0781;
+        content: '';
+        border-radius: 50%;
+        box-shadow: 0 0 10px #8C0781;
+    }
+
+    .slider-content .right li p:nth-child(1) {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+        font-size: 0.75rem;
+        opacity: 0.6;
+    }
+
+    .slider-content .right li p:nth-child(2) {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .directional {
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        z-index: 4;
+        display: flex;
+        gap: 8px;
+    }
+
+    .directional button {
+        width: 36px;
+        height: 36px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        opacity: 0.9;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .directional button:hover {
+        opacity: 1;
+        background-color: rgba(220, 53, 69, 0.9);
+        border-color: rgba(220, 53, 69, 0.9);
+        transform: translateY(-2px);
+    }
+
+    #slide .item:nth-child(1) .image {
+        opacity: 0;
+        transform: scale(0) translate(-100px);
+    }
+
+    #slide .item:nth-child(2) .image {
+        opacity: 1;
+        /* Nudge the second slide (img1.png) slightly toward center */
+        transform: scale(1) translateY(-1%);
+    }
+
+    #slide .item:nth-child(2) {
+        z-index: 3;
+    }
+
+    @@keyframes contentOut {
+        from {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate(0, -100%);
+            filter: blur(33px);
+        }
+    }
+
+    @@keyframes contentIn {
+        from {
+            opacity: 0;
+            transform: translate(0, 100%);
+            filter: blur(33px);
+        }
+        to {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+    }
+
+    #slide .item:nth-child(1) .left,
+    #slide .item:nth-child(1) .right,
+    #slide .item:nth-child(2) .left,
+    #slide .item:nth-child(2) .right {
+        display: block;
+    }
+
+    /* Hide large slider headings on wider screens to use the compact logo caption */
+    /* (removed - reverted to previous layout) */
+
+    #slide .item:nth-child(1) .left,
+    #slide .item:nth-child(1) .right {
+        animation: contentOut 1s ease-in-out 1 forwards;
+    }
+
+    #slide .item:nth-child(2) .left,
+    #slide .item:nth-child(2) .right {
+        animation: contentIn 1s ease-in-out 1 forwards;
+    }
+
+    /* SEARCH FILTER SECTION */
+    /* GLASS MORPHISM SEARCH SECTION - Apple Vision Style */
+    .search-section {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 24px 18px;
+        border-radius: 26px;
+        box-shadow: none;
+        border: none;
+        position: absolute;
+        bottom: 38px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 96%;
+        max-width: 1200px;
+        z-index: 500;
+        animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hero-slider-container {
+        position: relative;
+    }
+
+    @@keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-section h3 {
+        color: #ffffff;
+        margin-bottom: 14px;
+        font-weight: 800;
+        font-size: 1.35rem;
+        text-align: left;
+        letter-spacing: 0.8px;
+    }
+
+    .date-input {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 0.97rem;
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: #2c0e44;
+        height: 54px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .date-input:hover {
+        border-color: rgba(220, 53, 69, 0.28);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 6px 18px rgba(20, 16, 60, 0.14);
+    }
+
+    .date-input:focus {
+        border-color: rgba(220, 53, 69, 0.6);
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1), 0 8px 22px rgba(20, 16, 60, 0.16);
+        background: rgba(255, 255, 255, 0.98);
+        outline: none;
+    }
+
+    .search-section .form-label {
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 6px;
+        font-size: 0.85rem;
+        opacity: 0.95;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--secondary-color) 0%, #c82333 100%);
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+    }
+
+    .search-section .btn-primary {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: 0 4px 16px rgba(220, 53, 69, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .search-section .btn-primary {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 14px 24px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 0.97rem;
+        box-shadow: 0 10px 26px rgba(220, 53, 69, 0.32);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 54px;
+    }
+
+    .search-section .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(220, 53, 69, 0.45);
+    }
+
+    .search-section .row {
+        gap: 14px;
+        align-items: flex-end;
+    }
+
+    .search-section .col-md-5 {
+        flex: 1;
+    }
+
+    .search-section .col-md-2 {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    /* Reduced spacer so the cars grid sits closer to the slider */
+    .search-section-spacer {
+        height: 36px;
+        background: transparent;
+    }
+        padding: 12px 40px;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #c82333 0%, var(--secondary-color) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+    }
+
+    /* CAR CARDS SECTION */
+    .cars-section {
+        padding: 20px 0;
+    }
+
+    .cars-section h2 {
+        color: var(--primary-color);
+        margin-bottom: 40px;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .car-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .car-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 30px rgba(220, 53, 69, 0.2);
+    }
+
+    .car-image {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+    }
+
+    .car-body {
+        padding: 25px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .car-category {
+        display: inline-block;
+        background: var(--secondary-color);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        width: fit-content;
+    }
+
+    .car-model {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+
+    .car-plate {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+        font-family: monospace;
+    }
+
+    .car-price {
+        font-size: 1.8rem;
+        color: var(--secondary-color);
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .price-per-day {
+        font-size: 0.9rem;
+        color: #888;
+        margin-top: -10px;
+        margin-bottom: 20px;
+    }
+
+    .car-footer {
+        margin-top: auto;
+    }
+
+    .btn-rent {
+        width: 100%;
+        background: linear-gradient(135deg, var(--secondary-color) 0%, #c82333 100%);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .btn-rent:hover {
+        background: linear-gradient(135deg, #c82333 0%, var(--secondary-color) 100%);
+    }
+
+    /* MODAL STYLING */
+    .modal-content {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #2d2d2d 100%);
+        color: white;
+        border: none;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .form-label {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+    }
+
+    .form-control:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .price-display {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #2d2d2d 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .price-display h5 {
+        margin: 0 0 10px 0;
+        opacity: 0.8;
+    }
+
+    .price-amount {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    /* REPORT SECTION */
+    .report-section {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #2d2d2d 100%);
+        color: white;
+        padding: 60px 0;
+        margin-top: 60px;
+    }
+
+    .report-section h2 {
+        margin-bottom: 40px;
+        font-weight: 700;
+    }
+
+    .report-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .report-card h4 {
+        opacity: 0.8;
+        margin-bottom: 15px;
+    }
+
+    .report-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+    }
+
+    /* FOOTER */
+    footer {
+        background: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 30px 0;
+        margin-top: 60px;
+    }
+
+    footer p {
+        margin: 0;
+        opacity: 0.8;
+    }
+
+    /* LOADING SPINNER */
+    .spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @@keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 768px) {
+        .hero-slider-container {
+            height: 100vh;
+        }
+
+        .header ul {
+            display: none;
+        }
+
+        .header .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .slider-content .left h1 {
+            font-size: 2rem;
+        }
+
+        .slider-content .left {
+            left: 20px;
+            right: 20px;
+            top: 10%;
+        }
+
+        .slider-content .right {
+            display: none !important;
+        }
+
+        #slide .item .image {
+            height: 75%;
+        }
+
+        #slide .item .image img {
+            width: 85%;
+            max-height: 500px;
+        }
+
+        .search-section {
+            position: absolute;
+            bottom: 24px;
+            width: 95% !important;
+            padding: 26px 18px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .search-section h3 {
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+        }
+
+        .search-section .row {
+            flex-direction: column;
+        }
+
+        .search-section .col-md-5,
+        .search-section .col-md-2 {
+            width: 100% !important;
+        }
+
+        .search-section .form-label {
+            font-size: 0.8rem;
+        }
+
+        .car-image {
+            height: 200px;
+        }
+
+        .price-amount {
+            font-size: 1.5rem;
+        }
+
+        .report-value {
+            font-size: 1.8rem;
+        }
+    }
+
+    /* UTILITY CLASSES */
+    .no-cars {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+    }
+
+    .no-cars h4 {
+        margin-bottom: 10px;
+        color: var(--primary-color);
+    }
+
+    .alert {
+        border-radius: 8px;
+        border: none;
+    }
+
+    .alert-danger {
+        background: #ffe5e5;
+        color: #c82333;
+    }
+
+    .alert-success {
+        background: #e5ffe5;
+        color: #28a745;
+    }
+</style>
+
+<!-- HERO SLIDER SECTION -->
+<section class="hero-slider-container">
+    <div class="header">
+        <div class="header-nav nav-left">
+            <ul>
+                <li onclick="document.getElementById('carsGrid').scrollIntoView({behavior: 'smooth'})">FİLOMUZ</li>
+                <li style="padding-right:10px;" onclick="document.getElementById('startDate').scrollIntoView({behavior: 'smooth'})">REZERVASYON</li>
+            </ul>
+        </div>
+        <div class="logo-wrap">
+            <img src="~/images/logo.png" class="logo" alt="Logo">
+        </div>
+        <div class="header-nav nav-right">
+            <ul>
+                <li onclick="document.getElementById('reportSection').scrollIntoView({behavior: 'smooth'})">FAALİYETLERİMİZ</li>
+                <li onclick="showContactModal()" style="cursor:pointer;">İLETİŞİM</li>
+            </ul>
+        </div>
+    </div>
+    <div id="slide">
+        <div class="item">
+            <div class="image">
+                <img src="~/images/img2.png" alt="Car 1" style="width:85%;max-width:700px;max-height:700px;transform:translateY(1%);display:block;margin:0 auto;">
+            </div>
+            <div class="slider-content">
+                <div class="left">
+                    <h1>FIRSAT</h1>
+                    <div class="des">İlk araç kiralamanıza özel<br>Pilates eğitiminiz bizden!</div>
+                    <button onclick="document.getElementById('startDate').scrollIntoView({behavior: 'smooth'})">
+                        Araçları Görüntüle
+                        <i class="fa-solid fa-angle-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+                <div class="right">
+                    <h2>Fırsat Eğitim</h2>
+                    <ul>
+                        <li>
+                            <p>Birebir Seans</p>
+                            <p>Ter Atma Garantili</p>
+                        </li>
+                        <li>
+                            <p>Enerjiiiiiiiiii</p>
+                            <p>Kötülükleri Salacaksınız</p>
+                        </li>
+                        <li>
+                            <p>Adınıza Özel Kart</p>
+                            <p>Kara Ambar Kamyoncular Derneği</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="image">
+                <img src="~/images/img1.png" alt="Car 2">
+            </div>
+            <div class="slider-content">
+                <div class="left">
+                    <h1>YANINDAYIZ</h1>
+                    <div class="des">Güçlü filomuz ve<br>kurumsal-bireysel çözümlerimiz ile<br>her koşulda yanındayız!</div>
+                    <button onclick="document.getElementById('startDate').scrollIntoView({behavior: 'smooth'})">
+                        Hemen Kirala
+                        <i class="fa-solid fa-angle-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
+                    </button>
+                </div>
+                <div class="right">
+                    <h2>AVANTAJLAR</h2>
+                    <ul>
+                        <li>
+                            <p>Günlük Fiyat</p>
+                            <p>2.500TL'den başlayan</p>
+                        </li>
+                        <li>
+                            <p>Sigorta</p>
+                            <p>Tam Kapsam</p>
+                        </li>
+                        <li>
+                            <p>Destek</p>
+                            <p>7/24</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Third slider removed as requested -->
+    </div>
+    <div class="directional">
+        <button id="prev"><i class="fa-solid fa-angle-left"></i></button>
+        <button id="next"><i class="fa-solid fa-angle-right"></i></button>
+    </div>
+
+    <!-- GLASS MORPHISM SEARCH OVERLAY -->
+    <div class="search-section">
+        <h3>MÜSAİT ARAÇ ARAYIN</h3>
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label class="form-label" for="startDate">Alış Tarihi</label>
+                <input type="date" class="form-control date-input" id="startDate" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-5">
+                <label class="form-label" for="endDate">İade Tarihi</label>
+                <input type="date" class="form-control date-input" id="endDate" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-primary w-100" id="searchBtn">
+                    <span id="searchBtnText">Ara</span>
+                    <span id="searchSpinner" class="spinner" style="display:none; margin-left: 8px;"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEARCH & FILTER SECTION - MOVED ABOVE -->
+<section class="container">
+    <div class="search-section-spacer"></div>
+
+    <!-- CARS GRID -->
+    <section class="cars-section">
+        <h2>Güçlü Filomuz</h2>
+        <div class="row g-4" id="carsGrid">
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var car in Model)
+                {
+                    <div class="col-md-6 col-lg-4" data-plaka="@car.Plaka">
+                        <div class="car-card">
+                            @{
+                                var defaultFallback = "https://source.unsplash.com/800x600/?car";
+                                var imgUrl = string.IsNullOrEmpty(car.GorselUrl)
+                                    ? (car.MarkaModel switch
+                                    {
+                                        "Toyota Corolla 2024" => "https://source.unsplash.com/800x600/?Toyota%20Corolla",
+                                        "Renault Clio 5" => "https://source.unsplash.com/800x600/?Renault%20Clio",
+                                        "BMW 3 Series" => "https://source.unsplash.com/800x600/?BMW%203%20Series",
+                                        "Ford EcoSport" => "https://source.unsplash.com/800x600/?Ford%20EcoSport",
+                                        "Volkswagen Golf GTI" => "https://source.unsplash.com/800x600/?Volkswagen%20Golf%20GTI",
+                                        "Mercedes C-Class" => "https://source.unsplash.com/800x600/?Mercedes%20C%20Class",
+                                        "Audi Q5" => "https://source.unsplash.com/800x600/?Audi%20Q5",
+                                        "Hyundai i20" => "https://source.unsplash.com/800x600/?Hyundai%20i20",
+                                        "Nissan Qashqai" => "https://source.unsplash.com/800x600/?Nissan%20Qashqai",
+                                        "Fiat 500X" => "https://source.unsplash.com/800x600/?Fiat%20500X",
+                                        "Skoda Octavia" => "https://source.unsplash.com/800x600/?Skoda%20Octavia",
+                                        _ => defaultFallback
+                                    })
+                                    : car.GorselUrl;
+                            }
+                            <img src="@imgUrl" alt="@car.MarkaModel" class="car-image" onerror="this.src='https://source.unsplash.com/800x600/?car'">
+                            <div class="car-body">
+                                <span class="car-category">@car.Kategori</span>
+                                <div class="car-model">@car.MarkaModel</div>
+                                <div class="car-plate">🔑 @car.Plaka</div>
+                                <div class="car-price">₺@car.GunlukFiyat.ToString("F2")</div>
+                                <div class="price-per-day">/ gün</div>
+                                <div class="car-footer">
+                                    <button class="btn-rent" data-plaka="@car.Plaka" data-model="@car.MarkaModel" data-price="@car.GunlukFiyat">
+                                        Şimdi Kirala
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 no-cars">
+                    <h4>Araç Bulunamadı</h4>
+                    <p>Lütfen arama kriterlerinizi kontrol edin</p>
+                </div>
+            }
+        </div>
+    </section>
+</section>
+
+<!-- RESERVATION MODAL -->
+<div class="modal fade" id="reservationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Araç Rezervasyonu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reservationForm">
+                    <div class="mb-3">
+                        <label class="form-label">Müşteri Adı</label>
+                        <input type="text" class="form-control" id="customerName" placeholder="Adınız ve Soyadınız" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Araç</label>
+                        <input type="text" class="form-control" id="carModel" readonly>
+                        <input type="hidden" id="modalPlaka">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Başlangıç Tarihi</label>
+                        <input type="date" class="form-control" id="modalStartDate" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Bitiş Tarihi</label>
+                        <input type="date" class="form-control" id="modalEndDate" required>
+                    </div>
+
+                    <div class="price-display">
+                        <h5>Toplam Ücret</h5>
+                        <div class="price-amount" id="totalPrice">₺0.00</div>
+                    </div>
+
+                    <div id="alertContainer"></div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        ✓ Rezervasyonu Onayla
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- CONTACT MODAL -->
+            <div class="modal fade" id="contactModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">İLETİŞİM</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="font-weight:700;">Kurabiye var, simit var lan! Neye bakıyon...</p>
+                            <div class="ratio ratio-16x9">
+                                <iframe id="contactVideo" src="" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REPORT SECTION -->
+<section id="reportSection" class="report-section">
+    <div class="container">
+        <h2 style="text-align: center; margin-bottom: 40px;">Canlı İstatistikler</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="report-card">
+                    <h4>Son Kiralamalar</h4>
+                    <div class="report-value">₺<span id="totalIncome">0</span></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="report-card">
+                    <h4>Sık Kiralanan Araç</h4>
+                    <div class="report-value" id="topCar">-</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="report-card">
+                    <h4>Toplam Rezerve</h4>
+                    <div class="report-value" id="totalBookings">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 - KVKK-GDPR Falan Umrumuzda Değil LTD. ŞTİ. | Tüm haklarımız Türk milletine feda olsun (:</p>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Initialize date inputs with today's date
+    document.addEventListener('DOMContentLoaded', function () {
+        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = tomorrow;
+        document.getElementById('modalStartDate').value = today;
+        document.getElementById('modalEndDate').value = tomorrow;
+
+        // Load report data
+        loadReport();
+
+        // Rent buttons event listeners
+        document.querySelectorAll('.btn-rent').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const plaka = this.dataset.plaka;
+                const model = this.dataset.model;
+                const price = this.dataset.price;
+                openReservationModal(plaka, model);
+            });
+        });
+
+        // Search button
+        document.getElementById('searchBtn').addEventListener('click', searchCars);
+
+        // Reservation form submit
+        document.getElementById('reservationForm').addEventListener('submit', submitReservation);
+
+        // Update price when dates change in modal
+        document.getElementById('modalStartDate').addEventListener('change', updateModalPrice);
+        document.getElementById('modalEndDate').addEventListener('change', updateModalPrice);
+    });
+
+    function openReservationModal(plaka, model) {
+        document.getElementById('modalPlaka').value = plaka;
+        document.getElementById('carModel').value = model;
+        document.getElementById('modalTitle').textContent = model + ' - Rezervasyon';
+
+        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        
+        document.getElementById('modalStartDate').value = today;
+        document.getElementById('modalEndDate').value = tomorrow;
+
+        updateModalPrice();
+        
+        const modal = new bootstrap.Modal(document.getElementById('reservationModal'));
+        modal.show();
+    }
+
+    async function updateModalPrice() {
+        const plaka = document.getElementById('modalPlaka').value;
+        const startDate = document.getElementById('modalStartDate').value;
+        const endDate = document.getElementById('modalEndDate').value;
+
+        if (!plaka || !startDate || !endDate) {
+            document.getElementById('totalPrice').textContent = '₺0.00';
+            return;
+        }
+
+        if (new Date(startDate) >= new Date(endDate)) {
+            document.getElementById('totalPrice').textContent = '₺0.00';
+            return;
+        }
+
+        try {
+            const response = await fetch('/Home/CalculatePrice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `plaka=${encodeURIComponent(plaka)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('totalPrice').textContent = '₺' + data.price.toFixed(2);
+                }
+            }
+        } catch (error) {
+            console.error('Fiyat hesaplama hatası:', error);
+        }
+    }
+
+    async function submitReservation(e) {
+        e.preventDefault();
+
+        const customerName = document.getElementById('customerName').value;
+        const plaka = document.getElementById('modalPlaka').value;
+        const startDate = document.getElementById('modalStartDate').value;
+        const endDate = document.getElementById('modalEndDate').value;
+
+        if (!customerName || !plaka || !startDate || !endDate) {
+            showAlert('Lütfen tüm alanları doldurun', 'danger');
+            return;
+        }
+
+        try {
+            const response = await fetch('/Home/BookCar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `musteri=${encodeURIComponent(customerName)}&plaka=${encodeURIComponent(plaka)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert(data.message, 'success');
+                setTimeout(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('reservationModal')).hide();
+                    document.getElementById('reservationForm').reset();
+                    loadReport();
+                }, 2000);
+            } else {
+                showAlert(data.message, 'danger');
+            }
+        } catch (error) {
+            showAlert('Bir hata oluştu: ' + error.message, 'danger');
+            console.error('Rezervasyon hatası:', error);
+        }
+    }
+
+    async function searchCars() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+
+        if (!startDate || !endDate) {
+            showAlert('Lütfen başlangıç ve bitiş tarihlerini seçin', 'danger');
+            return;
+        }
+
+        if (new Date(startDate) >= new Date(endDate)) {
+            showAlert('Bitiş tarihi başlangıç tarihinden sonra olmalıdır', 'danger');
+            return;
+        }
+
+        const searchBtn = document.getElementById('searchBtn');
+        const searchBtnText = document.getElementById('searchBtnText');
+        const searchSpinner = document.getElementById('searchSpinner');
+
+        searchBtn.disabled = true;
+        searchBtnText.style.display = 'none';
+        searchSpinner.style.display = 'inline-block';
+
+        try {
+            const response = await fetch('/Home/CheckAvailability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                updateCarsGrid(data.cars, startDate, endDate);
+            } else {
+                showAlert(data.message, 'danger');
+            }
+        } catch (error) {
+            showAlert('Arama sırasında hata oluştu: ' + error.message, 'danger');
+            console.error('Arama hatası:', error);
+        } finally {
+            searchBtn.disabled = false;
+            searchBtnText.style.display = 'inline';
+            searchSpinner.style.display = 'none';
+        }
+    }
+
+    function updateCarsGrid(cars, startDate, endDate) {
+        const grid = document.getElementById('carsGrid');
+        grid.innerHTML = '';
+
+        function getImageForModel(model, providedUrl) {
+            if (providedUrl) return providedUrl;
+            const q = encodeURIComponent(model || 'car');
+            return `https://source.unsplash.com/800x600/?${q}`;
+        }
+
+        if (cars.length === 0) {
+            grid.innerHTML = '<div class="col-12 no-cars"><h4>Bu tarih aralığında müsait araç bulunmamaktadır</h4></div>';
+            return;
+        }
+
+        cars.forEach(car => {
+            const card = document.createElement('div');
+            card.className = 'col-md-6 col-lg-4';
+            const imageUrl = getImageForModel(car.markaModel, car.gorselUrl);
+            card.innerHTML = `
+                <div class="car-card">
+                    <img src="${imageUrl}" alt="${car.markaModel}" class="car-image" onerror="this.src='https://source.unsplash.com/800x600/?car'">
+                    <div class="car-body">
+                        <span class="car-category">${car.kategori}</span>
+                        <div class="car-model">${car.markaModel}</div>
+                        <div class="car-plate">🔑 ${car.plaka}</div>
+                        <div class="car-price">₺${car.gunlukFiyat.toFixed(2)}</div>
+                        <div class="price-per-day">/ gün</div>
+                        <div class="car-footer">
+                            <button class="btn-rent" data-plaka="${car.plaka}" data-model="${car.markaModel}" data-price="${car.gunlukFiyat}">
+                                Hemen Kirala
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+
+            // Add event listener to the new button
+            card.querySelector('.btn-rent').addEventListener('click', function () {
+                openReservationModal(this.dataset.plaka, this.dataset.model);
+            });
+        });
+    }
+
+    async function loadReport() {
+        try {
+            const response = await fetch('/Home/GetReport');
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('totalIncome').textContent = data.totalIncome.toFixed(2);
+                document.getElementById('topCar').textContent = data.topCar || '-';
+                document.getElementById('totalBookings').textContent = data.totalBookings;
+            }
+        } catch (error) {
+            console.error('Rapor yükleme hatası:', error);
+        }
+    }
+
+    function showAlert(message, type) {
+        const alertContainer = document.getElementById('alertContainer');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        alertContainer.appendChild(alertDiv);
+
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 5000);
+    }
+
+    // ==================== HERO SLIDER FUNCTIONALITY ====================
+    document.getElementById('next').onclick = function () {
+        let lists = document.querySelectorAll('.item');
+        document.getElementById('slide').appendChild(lists[0]);
+    }
+
+    document.getElementById('prev').onclick = function () {
+        let lists = document.querySelectorAll('.item');
+        document.getElementById('slide').prepend(lists[lists.length - 1]);
+    }
+
+    // Auto-slide every 5 seconds
+    setInterval(function () {
+        document.getElementById('next').click();
+    }, 5000);
+
+    // Show contact modal with alert and autoplaying (muted) YouTube short
+    function showContactModal() {
+        try {
+            alert('Kurabiye var, simit var lan! Neye bakıyon...');
+        } catch (e) {
+            // ignore
+        }
+        const iframe = document.getElementById('contactVideo');
+        // YouTube embed for the provided short id, autoplay muted so browsers allow playback
+        iframe.src = 'https://www.youtube.com/embed/z1v3RDJEtxo?autoplay=1&mute=1&rel=0';
+        const modalEl = document.getElementById('contactModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+
+        // Clear src when modal is hidden to stop playback
+        modalEl.addEventListener('hidden.bs.modal', function () {
+            iframe.src = '';
+        }, { once: true });
+    }
+</script>
