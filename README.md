@@ -5,11 +5,14 @@
 ![Lisans](https://img.shields.io/badge/Lisans-MIT-yellow)
 ![Durum](https://img.shields.io/badge/Durum-Üretim%20Hazır-brightgreen)
 
-## Özet
 
 **Akıllı Araç Kiralama Rezervasyon Sistemi**, TechCareer'in C# Yazılım Geliştirme programı kapsamında bir bitirme projesidir. Özgün görev bir konsol uygulaması olmakla birlikte, bu uygulama **ASP.NET Core MVC** üzerinde inşa edilmiş modern, duyarlı bir web uygulamasına dönüştürülmüştür.
 
 Sistem, özgün görevden alınan tüm zorunlu işlevsel gereksinimleri uygularken, Nesne Yönelimli Programlama (OOP) ilkeleri ve SOLID tasarım desenleri ile kurumsal mimariye sıkı sıkıya bağlı kalmaktadır.
+
+## Demo
+
+![Araç Kiralama Sistemi Demo](https://github.com/thisiscenkcetin/techcareer-csharp-project-CarRentalSystem/blob/main/demo.png?raw=true)
 
 ---
 
